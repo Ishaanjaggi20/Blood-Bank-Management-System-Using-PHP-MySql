@@ -1,0 +1,1466 @@
+
+TO BECOME DONOR :-
+
+<?php
+error_reporting(0);
+include('includes/config.php');
+if(isset($_POST['submit']))
+  {
+$fullname=$_POST['fullname'];
+$mobile=$_POST['mobileno'];
+$email=$_POST['emailid'];
+$age=$_POST['age'];
+$gender=$_POST['gender'];
+$blodgroup=$_POST['bloodgroup'];
+$address=$_POST['address'];
+$message=$_POST['message'];
+$status=1;
+$sql="INSERT INTO  tblblooddonars(FullName,MobileNumber,EmailId,Age,Gender,BloodGroup,Address,Message,status) VALUES(:fullname,:mobile,:email,:age,:gender,:blodgroup,:address,:message,:status)";
+$query = $dbh->prepare($sql);
+$query->bindParam(':fullname',$fullname,PDO::PARAM_STR);
+$query->bindParam(':mobile',$mobile,PDO::PARAM_STR);
+$query->bindParam(':email',$email,PDO::PARAM_STR);
+$query->bindParam(':age',$age,PDO::PARAM_STR);
+$query->bindParam(':gender',$gender,PDO::PARAM_STR);
+$query->bindParam(':blodgroup',$blodgroup,PDO::PARAM_STR);
+$query->bindParam(':address',$address,PDO::PARAM_STR);
+$query->bindParam(':message',$message,PDO::PARAM_STR);
+$query->bindParam(':status',$status,PDO::PARAM_STR);
+$query->execute();
+$lastInsertId = $dbh->lastInsertId();
+if($lastInsertId)
+{
+$msg="Your info submitted successfully";
+}
+else
+{
+$error="Something went wrong. Please try again";
+}
+
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>BloodBank & Donor | Become A Donar</title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/modern-business.css" rel="stylesheet">
+    <style>
+    .navbar-toggler {
+        z-index: 1;
+    }
+
+    @media (max-width: 576px) {
+        nav > .container {
+            width: 100%;
+        }
+    }
+    </style>
+        <style>
+    .errorWrap {
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #dd3d36;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+.succWrap{
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #5cb85c;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+    </style>
+
+
+</head>
+
+<body>
+
+<?php include('includes/header.php');?>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <h1 class="mt-4 mb-3">Become a <small>Donor</small></h1>
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="index.php">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Become a Donor</li>
+        </ol>
+            <?php if($error){?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php }
+        else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
+        <!-- Content Row -->
+        <form name="donar" method="post">
+<div class="row">
+<div class="col-lg-4 mb-4">
+<div class="font-italic">Full Name<span style="color:red">*</span></div>
+<div><input type="text" name="fullname" class="form-control" required></div>
+</div>
+<div class="col-lg-4 mb-4">
+<div class="font-italic">Mobile Number<span style="color:red">*</span></div>
+<div><input type="text" name="mobileno" class="form-control" required></div>
+</div>
+<div class="col-lg-4 mb-4">
+<div class="font-italic">Email Id</div>
+<div><input type="email" name="emailid" class="form-control"></div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-lg-4 mb-4">
+<div class="font-italic">Age<span style="color:red">*</span></div>
+<div><input type="text" name="age" class="form-control" required></div>
+</div>
+
+
+<div class="col-lg-4 mb-4">
+<div class="font-italic">Gender<span style="color:red">*</span></div>
+<div><select name="gender" class="form-control" required>
+<option value="">Select</option>
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+</select>
+</div>
+</div>
+
+<div class="col-lg-4 mb-4">
+<div class="font-italic">Blood Group<span style="color:red">*</span> </div>
+<div><select name="bloodgroup" class="form-control" required>
+<?php $sql = "SELECT * from  tblbloodgroup ";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$cnt=1;
+if($query->rowCount() > 0)
+{
+foreach($results as $result)
+{               ?>
+<option value="<?php echo htmlentities($result->BloodGroup);?>"><?php echo htmlentities($result->BloodGroup);?></option>
+<?php }} ?>
+</select>
+</div>
+</div>
+</div>
+
+
+<div class="row">
+<div class="col-lg-4 mb-4">
+<div class="font-italic">Address</div>
+<div><textarea class="form-control" name="address"></textarea></div>
+</div>
+
+<div class="col-lg-8 mb-4">
+<div class="font-italic">Message<span style="color:red">*</span></div>
+<div><textarea class="form-control" name="message" required> </textarea></div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-lg-4 mb-4">
+<div><input type="submit" name="submit" class="btn btn-primary" value="submit" style="cursor:pointer"></div>
+</div>
+
+
+
+</div>
+
+
+
+        <!-- /.row -->
+</form>
+        <!-- /.row -->
+</div>
+  <?php include('includes/footer.php');?>
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/tether/tether.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
+
+
+
+
+
+TO SEARCH DONOR :-
+
+
+<?php
+error_reporting(0);
+include('includes/config.php');
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>BloodBank & Donor | Become A Donar</title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/modern-business.css" rel="stylesheet">
+    <style>
+    .navbar-toggler {
+        z-index: 1;
+    }
+
+    @media (max-width: 576px) {
+        nav > .container {
+            width: 100%;
+        }
+    }
+    </style>
+        <style>
+    .errorWrap {
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #dd3d36;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+.succWrap{
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #5cb85c;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+    </style>
+
+
+</head>
+
+<body>
+
+<?php include('includes/header.php');?>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Page Heading/Breadcrumbs -->
+        <h1 class="mt-4 mb-3">Search <small>Donor</small></h1>
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="index.php">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Search  Donor</li>
+        </ol>
+            <?php if($error){?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php }
+        else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
+        <!-- Content Row -->
+        <form name="donar" method="post">
+<div class="row">
+
+
+
+<div class="col-lg-4 mb-4">
+<div class="font-italic">Blood Group<span style="color:red">*</span> </div>
+<div><select name="bloodgroup" class="form-control" required>
+<?php $sql = "SELECT * from  tblbloodgroup ";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$cnt=1;
+if($query->rowCount() > 0)
+{
+foreach($results as $result)
+{               ?>
+<option value="<?php echo htmlentities($result->BloodGroup);?>"><?php echo htmlentities($result->BloodGroup);?></option>
+<?php }} ?>
+</select>
+</div>
+</div>
+
+
+<div class="col-lg-4 mb-4">
+<div class="font-italic">Location </div>
+<div><textarea class="form-control" name="location"></textarea></div>
+</div>
+
+</div>
+
+<div class="row">
+<div class="col-lg-4 mb-4">
+<div><input type="submit" name="submit" class="btn btn-primary" value="submit" style="cursor:pointer"></div>
+</div>
+</div>
+       <!-- /.row -->
+</form>
+
+        <div class="row">
+                   <?php
+if(isset($_POST['submit']))
+{
+$status=1;
+$bloodgroup=$_POST['bloodgroup'];
+$location=$_POST['location'];
+$sql = "SELECT * from tblblooddonars where (status=:status and BloodGroup=:bloodgroup) ||  (Address=:location)";
+$query = $dbh -> prepare($sql);
+$query->bindParam(':status',$status,PDO::PARAM_STR);
+$query->bindParam(':bloodgroup',$bloodgroup,PDO::PARAM_STR);
+$query->bindParam(':location',$location,PDO::PARAM_STR);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$cnt=1;
+if($query->rowCount() > 0)
+{
+foreach($results as $result)
+{ ?>
+
+            <div class="col-lg-4 col-sm-6 portfolio-item">
+                <div class="card h-100">
+                    <a href="#"><img class="card-img-top img-fluid" src="images/blood-donor.jpg" alt="" ></a>
+                    <div class="card-block">
+                        <h4 class="card-title"><a href="#"><?php echo htmlentities($result->FullName);?></a></h4>
+                        <p class="card-text"><b>Mobile No. / Email Id :</b> <?php echo htmlentities($result->MobileNumber);?> /
+                        <?php if($result->EmailId=="")
+                        {
+                        echo htmlentities(NA);
+                        } else {
+echo htmlentities($result->EmailId);
+}
+?>
+                             </p>
+<p class="card-text"><b>  Gender :</b> <?php echo htmlentities($result->Gender);?></p>
+<p class="card-text"><b> Age:</b> <?php echo htmlentities($result->Age);?></p>
+<p class="card-text"><b>Blood Group :</b> <?php echo htmlentities($result->BloodGroup);?></p>
+<p class="card-text"><b>Address :</b>
+<?php if($result->Address=="")
+{
+echo htmlentities('NA');
+} else {
+echo htmlentities($result->Address);
+}
+?></p>
+     <p class="card-text"><b>Message :</b> <?php echo htmlentities($result->Message);?></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <?php }}
+else
+{
+echo htmlentities("No Record Found");
+
+}
+
+
+            } ?>
+
+
+
+
+
+        </div>
+
+
+
+</div>
+  <?php include('includes/footer.php');?>
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/tether/tether.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
+
+
+
+
+FOR ADMIN :-
+
+ADD BLOODGRP :-
+
+<?php
+session_start();
+error_reporting(0);
+include('includes/config.php');
+if(strlen($_SESSION['alogin'])==0)
+	{	
+header('location:index.php');
+}
+else{
+// Code for change password	
+if(isset($_POST['submit']))
+{
+$bloodgroup=$_POST['bloodgroup'];
+$sql="INSERT INTO  tblbloodgroup(BloodGroup) VALUES(:bloodgroup)";
+$query = $dbh->prepare($sql);
+$query->bindParam(':bloodgroup',$bloodgroup,PDO::PARAM_STR);
+$query->execute();
+$lastInsertId = $dbh->lastInsertId();
+if($lastInsertId)
+{
+$msg="Blood Group Created successfully";
+}
+else 
+{
+$error="Something went wrong. Please try again";
+}
+
+}
+?>
+
+<!doctype html>
+<html lang="en" class="no-js">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="theme-color" content="#3e454c">
+	
+	<title>BBDMS | Admin add-bloodgroup</title>
+
+	<!-- Font awesome -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<!-- Sandstone Bootstrap CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<!-- Bootstrap Datatables -->
+	<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+	<!-- Bootstrap social button library -->
+	<link rel="stylesheet" href="css/bootstrap-social.css">
+	<!-- Bootstrap select -->
+	<link rel="stylesheet" href="css/bootstrap-select.css">
+	<!-- Bootstrap file input -->
+	<link rel="stylesheet" href="css/fileinput.min.css">
+	<!-- Awesome Bootstrap checkbox -->
+	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
+	<!-- Admin Stye -->
+	<link rel="stylesheet" href="css/style.css">
+  <style>
+		.errorWrap {
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #dd3d36;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+.succWrap{
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #5cb85c;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+		</style>
+
+
+</head>
+
+<body>
+	<?php include('includes/header.php');?>
+	<div class="ts-main-content">
+	<?php include('includes/leftbar.php');?>
+		<div class="content-wrapper">
+			<div class="container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+					
+						<h2 class="page-title">Add Blood Group </h2>
+
+						<div class="row">
+							<div class="col-md-10">
+								<div class="panel panel-default">
+									<div class="panel-heading">Form fields</div>
+									<div class="panel-body">
+										<form method="post" name="chngpwd" class="form-horizontal" onSubmit="return valid();">
+										
+											
+  	        	  <?php if($error){?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } 
+				else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
+											<div class="form-group">
+												<label class="col-sm-4 control-label">Blood Group</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control" name="bloodgroup" id="bloodgroup" required>
+												</div>
+											</div>
+											<div class="hr-dashed"></div>
+											
+										
+								
+											
+											<div class="form-group">
+												<div class="col-sm-8 col-sm-offset-4">
+								
+													<button class="btn btn-primary" name="submit" type="submit">Submit</button>
+												</div>
+											</div>
+
+										</form>
+
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						
+					
+
+					</div>
+				</div>
+				
+			
+			</div>
+		</div>
+	</div>
+
+	<!-- Loading Scripts -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap-select.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.bootstrap.min.js"></script>
+	<script src="js/Chart.min.js"></script>
+	<script src="js/fileinput.js"></script>
+	<script src="js/chartData.js"></script>
+	<script src="js/main.js"></script>
+
+</body>
+
+</html>
+<?php } ?>
+
+
+
+ADD DONOR :-
+
+<?php
+session_start();
+error_reporting(0);
+include('includes/config.php');
+if(strlen($_SESSION['alogin'])==0)
+	{	
+header('location:index.php');
+}
+else{ 
+
+if(isset($_POST['submit']))
+  {
+$fullname=$_POST['fullname'];
+$mobile=$_POST['mobileno'];
+$email=$_POST['emailid'];
+$age=$_POST['age'];
+$gender=$_POST['gender'];
+$blodgroup=$_POST['bloodgroup'];
+$address=$_POST['address'];
+$message=$_POST['message'];
+$status=1;
+$sql="INSERT INTO  tblblooddonars(FullName,MobileNumber,EmailId,Age,Gender,BloodGroup,Address,Message,status) VALUES(:fullname,:mobile,:email,:age,:gender,:blodgroup,:address,:message,:status)";
+$query = $dbh->prepare($sql);
+$query->bindParam(':fullname',$fullname,PDO::PARAM_STR);
+$query->bindParam(':mobile',$mobile,PDO::PARAM_STR);
+$query->bindParam(':email',$email,PDO::PARAM_STR);
+$query->bindParam(':age',$age,PDO::PARAM_STR);
+$query->bindParam(':gender',$gender,PDO::PARAM_STR);
+$query->bindParam(':blodgroup',$blodgroup,PDO::PARAM_STR);
+$query->bindParam(':address',$address,PDO::PARAM_STR);
+$query->bindParam(':message',$message,PDO::PARAM_STR);
+$query->bindParam(':status',$status,PDO::PARAM_STR);
+$query->execute();
+$lastInsertId = $dbh->lastInsertId();
+if($lastInsertId)
+{
+$msg="Your info submitted successfully";
+}
+else 
+{
+$error="Something went wrong. Please try again";
+}
+
+}
+
+
+	?>
+<!doctype html>
+<html lang="en" class="no-js">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="theme-color" content="#3e454c">
+	
+	<title>BBDMS| Admin Add Donor</title>
+
+	<!-- Font awesome -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<!-- Sandstone Bootstrap CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<!-- Bootstrap Datatables -->
+	<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+	<!-- Bootstrap social button library -->
+	<link rel="stylesheet" href="css/bootstrap-social.css">
+	<!-- Bootstrap select -->
+	<link rel="stylesheet" href="css/bootstrap-select.css">
+	<!-- Bootstrap file input -->
+	<link rel="stylesheet" href="css/fileinput.min.css">
+	<!-- Awesome Bootstrap checkbox -->
+	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
+	<!-- Admin Stye -->
+	<link rel="stylesheet" href="css/style.css">
+<style>
+		.errorWrap {
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #dd3d36;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+.succWrap{
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #5cb85c;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+		</style>
+<script language="javascript">
+function isNumberKey(evt)
+      {
+         
+        var charCode = (evt.which) ? evt.which : event.keyCode
+                
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode!=46)
+           return false;
+
+         return true;
+      }
+      </script>
+</head>
+
+<body>
+	<?php include('includes/header.php');?>
+	<div class="ts-main-content">
+	<?php include('includes/leftbar.php');?>
+		<div class="content-wrapper">
+			<div class="container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+					
+						<h2 class="page-title">Add Donor</h2>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">Basic Info</div>
+<?php if($error){?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } 
+				else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
+
+									<div class="panel-body">
+<form method="post" class="form-horizontal" enctype="multipart/form-data">
+<div class="form-group">
+<label class="col-sm-2 control-label">Full Name<span style="color:red">*</span></label>
+<div class="col-sm-4">
+<input type="text" name="fullname" class="form-control" required>
+</div>
+<label class="col-sm-2 control-label">Mobile No<span style="color:red">*</span></label>
+<div class="col-sm-4">
+<input type="text" name="mobileno" onKeyPress="return isNumberKey(event)"  maxlength="10" class="form-control" required>
+</div>
+</div>
+
+<div class="form-group">
+<label class="col-sm-2 control-label">Email id </label>
+<div class="col-sm-4">
+<input type="email" name="emailid" class="form-control">
+</div>
+<label class="col-sm-2 control-label">Age<span style="color:red">*</span></label>
+<div class="col-sm-4">
+<input type="text" name="age" class="form-control" required>
+</div>
+</div>
+
+<div class="form-group">
+<label class="col-sm-2 control-label">Gender <span style="color:red">*</span></label>
+<div class="col-sm-4">
+<select name="gender" class="form-control" required>
+<option value="">Select</option>
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+</select>
+</div>
+<label class="col-sm-2 control-label">Blood Group<span style="color:red">*</span></label>
+<div class="col-sm-4">
+
+
+<select name="bloodgroup" class="form-control" required>
+<option value="">Select</option>
+<?php $sql = "SELECT * from  tblbloodgroup ";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$cnt=1;
+if($query->rowCount() > 0)
+{
+foreach($results as $result)
+{				?>	
+<option value="<?php echo htmlentities($result->BloodGroup);?>"><?php echo htmlentities($result->BloodGroup);?></option>
+<?php }} ?>
+</select>
+
+</div>
+</div>
+
+
+											
+<div class="hr-dashed"></div>
+<div class="form-group">
+<label class="col-sm-2 control-label">Address</label>
+<div class="col-sm-10">
+<textarea class="form-control" name="address" ></textarea>
+</div>
+</div>
+
+<div class="hr-dashed"></div>
+<div class="form-group">
+<label class="col-sm-2 control-label">Message<span style="color:red">*</span></label>
+<div class="col-sm-10">
+<textarea class="form-control" name="message" required> </textarea>
+</div>
+</div>
+
+
+
+											<div class="form-group">
+												<div class="col-sm-8 col-sm-offset-2">
+													<button class="btn btn-default" type="reset">Cancel</button>
+													<button class="btn btn-primary" name="submit" type="submit">Save changes</button>
+												</div>
+											</div>
+
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					
+
+					</div>
+				</div>
+				
+			
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Loading Scripts -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap-select.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.bootstrap.min.js"></script>
+	<script src="js/Chart.min.js"></script>
+	<script src="js/fileinput.js"></script>
+	<script src="js/chartData.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
+<?php } ?>
+
+DASHBOARD :-
+
+<?php
+session_start();
+error_reporting(0);
+include('includes/config.php');
+if(strlen($_SESSION['alogin'])==0)
+	{	
+header('location:index.php');
+}
+else{
+	?>
+<!doctype html>
+<html lang="en" class="no-js">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="theme-color" content="#3e454c">
+	
+	<title>BBDMS | Admin Dashboard</title>
+
+	<!-- Font awesome -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<!-- Sandstone Bootstrap CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<!-- Bootstrap Datatables -->
+	<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+	<!-- Bootstrap social button library -->
+	<link rel="stylesheet" href="css/bootstrap-social.css">
+	<!-- Bootstrap select -->
+	<link rel="stylesheet" href="css/bootstrap-select.css">
+	<!-- Bootstrap file input -->
+	<link rel="stylesheet" href="css/fileinput.min.css">
+	<!-- Awesome Bootstrap checkbox -->
+	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
+	<!-- Admin Stye -->
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<?php include('includes/header.php');?>
+
+	<div class="ts-main-content">
+<?php include('includes/leftbar.php');?>
+		<div class="content-wrapper">
+			<div class="container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+
+						<h2 class="page-title">Dashboard</h2>
+						
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-3">
+										<div class="panel panel-default">
+											<div class="panel-body bk-primary text-light">
+												<div class="stat-panel text-center">
+<?php 
+$sql ="SELECT id from tblbloodgroup ";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$bg=$query->rowCount();
+?>
+													<div class="stat-panel-number h1 "><?php echo htmlentities($bg);?></div>
+													<div class="stat-panel-title text-uppercase">Listed Blood Groups</div>
+												</div>
+											</div>
+											<a href="manage-bloodgroup.php" class="block-anchor panel-footer">Full Detail <i class="fa fa-arrow-right"></i></a>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="panel panel-default">
+											<div class="panel-body bk-success text-light">
+												<div class="stat-panel text-center">
+												<?php 
+$sql1 ="SELECT id from tblblooddonars ";
+$query1 = $dbh -> prepare($sql1);;
+$query1->execute();
+$results1=$query1->fetchAll(PDO::FETCH_OBJ);
+$regbd=$query1->rowCount();
+?>
+													<div class="stat-panel-number h1 "><?php echo htmlentities($regbd);?></div>
+													<div class="stat-panel-title text-uppercase">Registered Blood Group</div>
+												</div>
+											</div>
+											<a href="donor-list.php" class="block-anchor panel-footer text-center">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="panel panel-default">
+											<div class="panel-body bk-info text-light">
+												<div class="stat-panel text-center">
+												<?php 
+$sql6 ="SELECT id from tblcontactusquery ";
+$query6 = $dbh -> prepare($sql6);;
+$query6->execute();
+$results6=$query6->fetchAll(PDO::FETCH_OBJ);
+$query=$query6->rowCount();
+?>
+													<div class="stat-panel-number h1 "><?php echo htmlentities($query);?></div>
+													<div class="stat-panel-title text-uppercase">Total Quries</div>
+												</div>
+											</div>
+											<a href="manage-conactusquery.php" class="block-anchor panel-footer text-center">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
+										</div>
+									</div>
+							
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Loading Scripts -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap-select.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.bootstrap.min.js"></script>
+	<script src="js/Chart.min.js"></script>
+	<script src="js/fileinput.js"></script>
+	<script src="js/chartData.js"></script>
+	<script src="js/main.js"></script>
+	
+	<script>
+		
+	window.onload = function(){
+    
+		// Line chart from swirlData for dashReport
+		var ctx = document.getElementById("dashReport").getContext("2d");
+		window.myLine = new Chart(ctx).Line(swirlData, {
+			responsive: true,
+			scaleShowVerticalLines: false,
+			scaleBeginAtZero : true,
+			multiTooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
+		}); 
+		
+		// Pie Chart from doughutData
+		var doctx = document.getElementById("chart-area3").getContext("2d");
+		window.myDoughnut = new Chart(doctx).Pie(doughnutData, {responsive : true});
+
+		// Dougnut Chart from doughnutData
+		var doctx = document.getElementById("chart-area4").getContext("2d");
+		window.myDoughnut = new Chart(doctx).Doughnut(doughnutData, {responsive : true});
+
+	}
+	</script>
+</body>
+</html>
+<?php } ?>
+
+
+DONOR LIST & CONTACTS :-
+
+
+<?php
+session_start();
+error_reporting(0);
+include('includes/config.php');
+if(strlen($_SESSION['alogin'])==0)
+	{	
+header('location:index.php');
+}
+else{
+if(isset($_REQUEST['hidden']))
+	{
+$eid=intval($_GET['hidden']);
+$status="0";
+$sql = "UPDATE tblblooddonars SET Status=:status WHERE  id=:eid";
+$query = $dbh->prepare($sql);
+$query -> bindParam(':status',$status, PDO::PARAM_STR);
+$query-> bindParam(':eid',$eid, PDO::PARAM_STR);
+$query -> execute();
+
+$msg="Booking Successfully Cancelled";
+}
+
+
+if(isset($_REQUEST['public']))
+	{
+$aeid=intval($_GET['public']);
+$status=1;
+
+$sql = "UPDATE tblblooddonars SET Status=:status WHERE  id=:aeid";
+$query = $dbh->prepare($sql);
+$query -> bindParam(':status',$status, PDO::PARAM_STR);
+$query-> bindParam(':aeid',$aeid, PDO::PARAM_STR);
+$query -> execute();
+
+$msg="Booking Successfully Confirmed";
+}
+if(isset($_REQUEST['del']))
+	{
+$did=intval($_GET['del']);
+$sql = "delete from tblblooddonars WHERE  id=:did";
+$query = $dbh->prepare($sql);
+$query-> bindParam(':did',$did, PDO::PARAM_STR);
+$query -> execute();
+
+$msg="Record deleted Successfully ";
+}
+
+ ?>
+
+<!doctype html>
+<html lang="en" class="no-js">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="theme-color" content="#3e454c">
+	
+	<title>BBDMS | Donor List  </title>
+
+	<!-- Font awesome -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<!-- Sandstone Bootstrap CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<!-- Bootstrap Datatables -->
+	<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+	<!-- Bootstrap social button library -->
+	<link rel="stylesheet" href="css/bootstrap-social.css">
+	<!-- Bootstrap select -->
+	<link rel="stylesheet" href="css/bootstrap-select.css">
+	<!-- Bootstrap file input -->
+	<link rel="stylesheet" href="css/fileinput.min.css">
+	<!-- Awesome Bootstrap checkbox -->
+	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
+	<!-- Admin Stye -->
+	<link rel="stylesheet" href="css/style.css">
+  <style>
+		.errorWrap {
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #dd3d36;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+.succWrap{
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #5cb85c;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+		</style>
+
+</head>
+
+<body>
+	<?php include('includes/header.php');?>
+
+	<div class="ts-main-content">
+		<?php include('includes/leftbar.php');?>
+		<div class="content-wrapper">
+			<div class="container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+
+						<h2 class="page-title">Donors List</h2>
+
+						<!-- Zero Configuration Table -->
+						<div class="panel panel-default">
+							<div class="panel-heading">Donors Info</div>
+							<div class="panel-body">
+							<?php if($error){?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } 
+				else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
+				<a href="download-records.php" style="color:red; font-size:16px;">Download Donor List</a>
+								<table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+									<thead>
+										<tr>
+										<th>#</th>
+											<th>Name</th>
+											<th>Mobile No</th>
+											<th>Email</th>
+											<th>Age</th>
+											<th>Gender</th>
+											<th>Blood Group</th>
+											<th>address</th>
+											<th>Message </th>
+											<th>action </th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+										<th>#</th>
+										<th>Name</th>
+											<th>Mobile No</th>
+											<th>Email</th>
+											<th>Age</th>
+											<th>Gender</th>
+											<th>Blood Group</th>
+											<th>address</th>
+											<th>Message </th>
+											<th>action </th>
+										</tr>
+									</tfoot>
+									<tbody>
+
+<?php $sql = "SELECT * from  tblblooddonars ";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$cnt=1;
+if($query->rowCount() > 0)
+{
+foreach($results as $result)
+{				?>	
+										<tr>
+											<td><?php echo htmlentities($cnt);?></td>
+											<td><?php echo htmlentities($result->FullName);?></td>
+											<td><?php echo htmlentities($result->MobileNumber);?></td>
+											<td><?php echo htmlentities($result->EmailId);?></td>
+											<td><?php echo htmlentities($result->Gender);?></td>
+											<td><?php echo htmlentities($result->Age);?></td>
+											<td><?php echo htmlentities($result->BloodGroup);?></td>
+											<td><?php echo htmlentities($result->Address);?></td>
+											<td><?php echo htmlentities($result->Message);?></td>
+										
+										
+										<td>
+<?php if($result->status==1)
+{?>
+<a href="donor-list.php?hidden=<?php echo htmlentities($result->id);?>" onclick="return confirm('Do you really want to hiidden this detail')"> Make Hidden</a> 
+<?php } else {?>
+
+<a href="donor-list.php?public=<?php echo htmlentities($result->id);?>" onclick="return confirm('Do you really want to Public this detail')"> Make Public</a>
+
+<?php } ?>
+<a href="donor-list.php?del=<?php echo htmlentities($result->id);?>" onclick="return confirm('Do you really want to delete this record')"> Delete</a>
+</td>
+
+										</tr>
+										<?php $cnt=$cnt+1; }} ?>
+										
+									</tbody>
+								</table>
+
+						
+
+							</div>
+						</div>
+
+					
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Loading Scripts -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap-select.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/dataTables.bootstrap.min.js"></script>
+	<script src="js/Chart.min.js"></script>
+	<script src="js/fileinput.js"></script>
+	<script src="js/chartData.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
+<?php } ?>
+
+
+LOGOUT :-
+
+<?php
+session_start(); 
+$_SESSION = array();
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 60*60,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
+}
+unset($_SESSION['login']);
+session_destroy(); // destroy session
+header("location:index.php"); 
+?>
+
+
+
+
+
+SQL CODE :-
+
+
+-- phpMyAdmin SQL Dump
+-- version 4.4.14
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jul 01, 2017 at 04:17 PM
+-- Server version: 5.6.26
+-- PHP Version: 5.5.28
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `bbdms`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE IF NOT EXISTS `admin` (
+  `id` int(11) NOT NULL,
+  `UserName` varchar(100) NOT NULL,
+  `Password` varchar(100) NOT NULL,
+  `updationDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `UserName`, `Password`, `updationDate`) VALUES
+(1, 'admin', '5c428d8875d2948607f3e3fe134d71b4', '2017-06-18 12:22:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblblooddonars`
+--
+
+CREATE TABLE IF NOT EXISTS `tblblooddonars` (
+  `id` int(11) NOT NULL,
+  `FullName` varchar(100) DEFAULT NULL,
+  `MobileNumber` char(11) DEFAULT NULL,
+  `EmailId` varchar(100) DEFAULT NULL,
+  `Gender` varchar(20) DEFAULT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `BloodGroup` varchar(20) DEFAULT NULL,
+  `Address` varchar(255) DEFAULT NULL,
+  `Message` mediumtext,
+  `PostingDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(1) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblblooddonars`
+--
+
+INSERT INTO `tblblooddonars` (`id`, `FullName`, `MobileNumber`, `EmailId`, `Gender`, `Age`, `BloodGroup`, `Address`, `Message`, `PostingDate`, `status`) VALUES
+(1, 'Mark Den', '9999857868', 'markd@gmail.com', 'Male', 27, 'O+', ' bdhdh dhf hd h', ' d hd hd fh d', '2017-06-30 20:14:16', 1),
+(2, 'Harry Sins', '41241241241', 'harrys@dfdsf.com', 'Male', 34, 'AB-', ' fsdfds', ' fsdf', '2017-06-30 20:48:11', 1),
+(3, 'Emmie', '42352352352', '', 'Female', 23, 'A+', NULL, ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ', '2017-07-01 07:21:21', 1),
+(4, 'Tom', '35345435345', '', 'Male', 26, 'AB-', NULL, ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ', '2017-07-01 07:21:42', 1),
+(5, 'Robert Dr', '8569855244', 'robert@test.com', 'Male', 32, 'A-', 'Test Demo', 'Test demo Test demoTest demoTest demoTest demoTest demoTest demoTest demoTest demoTest demoTest demoTest demoTest demo', '2017-07-01 09:00:18', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblbloodgroup`
+--
+
+CREATE TABLE IF NOT EXISTS `tblbloodgroup` (
+  `id` int(11) NOT NULL,
+  `BloodGroup` varchar(20) DEFAULT NULL,
+  `PostingDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblbloodgroup`
+--
+
+INSERT INTO `tblbloodgroup` (`id`, `BloodGroup`, `PostingDate`) VALUES
+(1, 'A-', '2017-06-30 20:33:50'),
+(2, 'AB-', '2017-06-30 20:34:00'),
+(3, 'O-', '2017-06-30 20:34:05'),
+(4, 'A-', '2017-06-30 20:34:10'),
+(5, 'A+', '2017-06-30 20:34:13'),
+(6, 'AB+', '2017-06-30 20:34:18');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblcontactusinfo`
+--
+
+CREATE TABLE IF NOT EXISTS `tblcontactusinfo` (
+  `id` int(11) NOT NULL,
+  `Address` tinytext,
+  `EmailId` varchar(255) DEFAULT NULL,
+  `ContactNo` char(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblcontactusinfo`
+--
+
+INSERT INTO `tblcontactusinfo` (`id`, `Address`, `EmailId`, `ContactNo`) VALUES
+(1, 'Test Demo test demo																									', 'code-projects.org', '8585233222');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblcontactusquery`
+--
+
+CREATE TABLE IF NOT EXISTS `tblcontactusquery` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `EmailId` varchar(120) DEFAULT NULL,
+  `ContactNumber` char(11) DEFAULT NULL,
+  `Message` longtext,
+  `PostingDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblcontactusquery`
+--
+
+INSERT INTO `tblcontactusquery` (`id`, `name`, `EmailId`, `ContactNumber`, `Message`, `PostingDate`, `status`) VALUES
+(1, 'Anuj Kumar', 'webhostingamigo@gmail.com', '2147483647', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry''s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum', '2017-06-18 10:03:07', 1),
+(2, 'caasda', 'webhostingamigo@gmail.com', '42342342', 'drftghjk', '2017-06-30 21:17:09', NULL),
+(3, 'caasda', 'webhostingamigo@gmail.com', '42342342', 'drftghjk', '2017-06-30 21:21:30', NULL),
+(4, 'te', 'sdfsdf@gmail.com', '75787875545', 'sfsdf sdg hs h sh', '2017-07-01 07:19:36', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblpages`
+--
+
+CREATE TABLE IF NOT EXISTS `tblpages` (
+  `id` int(11) NOT NULL,
+  `PageName` varchar(255) DEFAULT NULL,
+  `type` varchar(255) NOT NULL DEFAULT '',
+  `detail` longtext NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblpages`
+--
+
+INSERT INTO `tblpages` (`id`, `PageName`, `type`, `detail`) VALUES
+(2, 'Why Become Donor', 'donor', '<span style="color: rgb(0, 0, 0); font-family: &quot;Open Sans&quot;, Arial, sans-serif; font-size: 14px; text-align: justify;"> YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. .YOUR TEXT HERE. . </span>'),
+(3, 'About Us ', 'aboutus', '<span style="color: rgb(0, 0, 0); font-family: &quot;Open Sans&quot;, Arial, sans-serif; text-align: justify;"> This is a non-profitable,service motive Circle of Youths purely devoted  for the welfare of society.Encouraging and inspiring people to donate blood and  providing fresh blood to the needy people without any cost is the real goal of this organization.We feel one day no one in this country will die in scarcity of blood.
+
+    People in need of blood contact us (in case they fail to manage from their family,friend,relatives or blood bank). In such condition,we manage blood donors from our online database,which itself is the countrys largest donor online database . we have more than 40 hundred donors registered. Since our registration in May 2011, we successfully have saved more than 30 hundred lives and have also brought smiles at the faces of more than 35 hundred families throughout the country.</span>');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tblblooddonars`
+--
+ALTER TABLE `tblblooddonars`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tblbloodgroup`
+--
+ALTER TABLE `tblbloodgroup`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tblcontactusinfo`
+--
+ALTER TABLE `tblcontactusinfo`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tblcontactusquery`
+--
+ALTER TABLE `tblcontactusquery`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tblpages`
+--
+ALTER TABLE `tblpages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `tblblooddonars`
+--
+ALTER TABLE `tblblooddonars`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `tblbloodgroup`
+--
+ALTER TABLE `tblbloodgroup`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `tblcontactusinfo`
+--
+ALTER TABLE `tblcontactusinfo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `tblcontactusquery`
+--
+ALTER TABLE `tblcontactusquery`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `tblpages`
+--
+ALTER TABLE `tblpages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
